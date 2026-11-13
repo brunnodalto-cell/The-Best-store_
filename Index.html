@@ -1,0 +1,340 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>THE BEST STORE</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #090714;
+  color: white;
+  font-family: Arial, sans-serif;
+}
+
+header {
+  text-align: center;
+  padding: 35px 10px;
+  background: linear-gradient(135deg,#180c30,#35105d);
+  border-bottom: 2px solid #a34aff;
+}
+
+header h1 {
+  color: #f5d477;
+  font-size: 34px;
+  text-shadow: 0 0 15px purple;
+}
+
+header p {
+  letter-spacing: 4px;
+}
+
+.container {
+  max-width: 1100px;
+  margin: auto;
+  padding: 18px;
+}
+
+h2 {
+  color: #f5d477;
+  margin-top: 30px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  gap: 12px;
+}
+
+.card {
+  background: linear-gradient(145deg,#281440,#111020);
+  border: 1px solid #8744bc;
+  border-radius: 14px;
+  padding: 15px;
+  text-align: center;
+}
+
+.fruit {
+  font-size: 55px;
+  margin: 12px;
+  filter: drop-shadow(0 0 12px #a64aff);
+}
+
+.card h3 {
+  margin: 8px 0;
+}
+
+.price {
+  color: #ffdc80;
+  font-size: 21px;
+  font-weight: bold;
+}
+
+button {
+  border: none;
+  border-radius: 9px;
+  padding: 12px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.add {
+  width: 100%;
+  color: white;
+  background: linear-gradient(90deg,#7023c5,#b34cff);
+}
+
+.cart {
+  margin-top: 30px;
+  padding: 18px;
+  border: 1px solid #9148c5;
+  border-radius: 15px;
+  background: #171025;
+}
+
+.cart-item {
+  padding: 8px 0;
+  border-bottom: 1px solid #49315e;
+}
+
+.total {
+  color: #ffdc80;
+  font-size: 23px;
+  font-weight: bold;
+  margin: 18px 0;
+}
+
+.finish {
+  width: 100%;
+  background: linear-gradient(90deg,#7023c5,#b34cff);
+  color: white;
+  font-size: 16px;
+}
+
+.clear {
+  width: 100%;
+  margin-top: 8px;
+  background: #332443;
+  color: white;
+}
+
+#whatsapp {
+  display: none;
+  width: 100%;
+  margin-top: 15px;
+  padding: 15px;
+  background: #7023c5;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  font-weight: bold;
+  border-radius: 10px;
+}
+
+@media(min-width:650px) {
+  .grid {
+    grid-template-columns: repeat(4,1fr);
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>♛ THE BEST STORE ♛</h1>
+  <p>BLOX FRUITS</p>
+</header>
+
+<div class="container">
+
+<h2>🍇 FRUTAS</h2>
+<div class="grid" id="fruits"></div>
+
+<h2>♛ GAMEPASSES</h2>
+<div class="grid" id="passes"></div>
+
+<div class="cart">
+  <h2>🛒 SEU CARRINHO</h2>
+
+  <div id="cartList">
+    Nenhum produto adicionado.
+  </div>
+
+  <div class="total" id="total">
+    Total: R$ 0,00
+  </div>
+
+  <button class="finish" onclick="finalizar()">
+    FINALIZAR PEDIDO
+  </button>
+
+  <button class="clear" onclick="limpar()">
+    LIMPAR CARRINHO
+  </button>
+
+  <a id="whatsapp" target="_blank">
+    FALAR COM VENDEDOR NO WHATSAPP
+  </a>
+</div>
+
+</div>
+
+<script>
+const frutas = [
+  ["Kitsune",21,"🦊"],
+  ["Magnet",28,"🧲"],
+  ["Control",9.50,"🔷"],
+  ["Venom",7.50,"🐍"],
+  ["Tiger",9,"🐯"],
+  ["Yeti",8.50,"❄️"],
+  ["Gas",5,"☁️"],
+  ["Lightning",5,"⚡"],
+  ["Dough",5,"🍩"],
+  ["Portal",5.80,"🌀"],
+  ["T-Rex",5.50,"🦖"],
+  ["Buddha",5,"✨"]
+];
+
+const gamepasses = [
+  ["Notificador de Frutas",87,"🔔"],
+  ["Yoru",43.50,"⚔️"],
+  ["2x Maestria",20,"⭐"],
+  ["2x Dinheiro",20,"💰"],
+  ["+1 Espaço",19,"🎒"],
+  ["Barcos Rápidos",17.80,"🚤"],
+  ["2x Drop",17.80,"🎁"]
+];
+
+let carrinho = [];
+
+function mostrarProdutos(lista, elemento) {
+  const area = document.getElementById(elemento);
+
+  lista.forEach(item => {
+    const card = document.createElement("div");
+    card.className = "card";
+
+    const icon = document.createElement("div");
+    icon.className = "fruit";
+    icon.textContent = item[2];
+
+    const nome = document.createElement("h3");
+    nome.textContent = item[0];
+
+    const preco = document.createElement("div");
+    preco.className = "price";
+    preco.textContent = dinheiro(item[1]);
+
+    const botao = document.createElement("button");
+    botao.className = "add";
+    botao.textContent = "＋ ADICIONAR";
+
+    botao.onclick = () => adicionar(item);
+
+    card.append(icon,nome,preco,botao);
+    area.appendChild(card);
+  });
+}
+
+function dinheiro(valor) {
+  return valor.toLocaleString("pt-BR", {
+    style: "currency",
+    currency: "BRL"
+  });
+}
+
+function adicionar(item) {
+  const existente = carrinho.find(p => p[0] === item[0]);
+
+  if (existente) {
+    existente[1]++;
+  } else {
+    carrinho.push([item[0],1,item[1]]);
+  }
+
+  atualizarCarrinho();
+}
+
+function atualizarCarrinho() {
+  const area = document.getElementById("cartList");
+  area.innerHTML = "";
+
+  let total = 0;
+
+  if (carrinho.length === 0) {
+    area.textContent = "Nenhum produto adicionado.";
+  }
+
+  carrinho.forEach(item => {
+    const subtotal = item[1] * item[2];
+    total += subtotal;
+
+    const linha = document.createElement("div");
+    linha.className = "cart-item";
+    linha.textContent =
+      item[0] + " x " + item[1] +
+      " — " + dinheiro(subtotal);
+
+    area.appendChild(linha);
+  });
+
+  document.getElementById("total").textContent =
+    "Total: " + dinheiro(total);
+
+  document.getElementById("whatsapp").style.display = "none";
+}
+
+function limpar() {
+  carrinho = [];
+  atualizarCarrinho();
+}
+
+function finalizar() {
+  if (carrinho.length === 0) {
+    alert("Adicione algum produto primeiro!");
+    return;
+  }
+
+  let total = 0;
+
+  let mensagem =
+    "Olá! Quero fazer um pedido na THE BEST STORE:\n\n";
+
+  carrinho.forEach(item => {
+    mensagem += item[0] + " x " + item[1] +
+      " — " + dinheiro(item[1] * item[2]) + "\n";
+
+    total += item[1] * item[2];
+  });
+
+  mensagem += "\nTOTAL: " + dinheiro(total);
+  mensagem += "\nGostaria das instruções para pagar via Pix.";
+
+  const link = document.getElementById("whatsapp");
+
+  link.href =
+    "https://wa.me/5517996269466?text=" +
+    encodeURIComponent(mensagem);
+
+  link.style.display = "block";
+  link.scrollIntoView({
+    behavior: "smooth",
+    block: "center"
+  });
+}
+
+mostrarProdutos(frutas,"fruits");
+mostrarProdutos(gamepasses,"passes");
+atualizarCarrinho();
+
+</script>
+
+</body>
+</html>
